@@ -1,0 +1,42 @@
+{
+  "registration": [
+    {
+      "register_request": "&cPlease, register to the server with the command: /register <password> <password>",
+      "command_usage": "Usage: /register <password> <password>",
+      "success": "&aSuccessful registration!"
+    }
+  ],
+
+  "login": [
+    {
+      "login_request": "&cPlease, login to the server with the command: /login <password>",
+      "command_usage": "Usage: /login <password>",
+      "success": "&aSuccessful login!",
+      "wrong_password": "&cWrong password!"
+    }
+  ],
+
+  "title": [
+    {
+      "register": [
+        {
+          "mainTitle": "Please register",
+          "subTitle": "Use /register <password> <password>"
+        }
+      ],
+      "login": [
+        {
+          "mainTitle": "Please login",
+          "subTitle": "Use /login <password>"
+        }
+      ]
+    }
+  ],
+
+  "error_messages": [
+    {
+      "login_required": "&cAuthentication required.",
+      "logged_in": "&cYou're already logged in!"
+    }
+  ]
+}
