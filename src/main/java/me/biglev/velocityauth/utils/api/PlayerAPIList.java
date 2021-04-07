@@ -7,8 +7,7 @@ public class PlayerAPIList {
     private HashMap<String, PlayerAPI> playerAPIS = new HashMap<>();
 
     public void addPlayer(PlayerAPI paramPlayer){
-        if (playerAPIS.get(paramPlayer.getName()) == null)
-            playerAPIS.put(paramPlayer.getName(), paramPlayer);
+        playerAPIS.putIfAbsent(paramPlayer.getName(), paramPlayer);
     }
 
     public PlayerAPI searchPlayer(String paramString) {

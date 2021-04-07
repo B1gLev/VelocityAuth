@@ -4,6 +4,7 @@ import com.velocitypowered.api.event.PostOrder;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
+import com.velocitypowered.api.event.connection.PreLoginEvent;
 import com.velocitypowered.api.proxy.Player;
 import me.biglev.velocityauth.Main;
 import me.biglev.velocityauth.utils.Core;
@@ -16,6 +17,11 @@ public class PlayerLogin {
         Player player = e.getPlayer();
 
         Core.playerExists(player);
+    }
+
+    @Subscribe(order = PostOrder.NORMAL)
+    public void preLogin(PreLoginEvent e) {
+//        e.setResult(PreLoginEvent.PreLoginComponentResult.forceOnlineMode());
     }
 
     @Subscribe(order = PostOrder.NORMAL)
