@@ -8,6 +8,7 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
 import me.biglev.velocityauth.commands.LoginCommand;
 import me.biglev.velocityauth.commands.RegisterCommand;
 import me.biglev.velocityauth.listeners.PlayerCommandHandler;
@@ -35,6 +36,7 @@ public class Main {
     private static Mysql mysql;
     private static Main main;
     private static PlayerAPIList playerAPIList;
+    private static MinecraftChannelIdentifier OUTGOING;
 
     @Inject
     public Main(Logger logger, ProxyServer server, @DataDirectory Path path) {
@@ -74,6 +76,8 @@ public class Main {
         server.getEventManager().register(this, new PlayerLogin());
         server.getEventManager().register(this, new PlayerMessageHandler());
         server.getEventManager().register(this, new PlayerCommandHandler());
+
+        server.getChannelRegistrar().register(OUTGOING = MinecraftChannelIdentifier.create("db", "server"));
     }
 
     public static Mysql getMysql() {
@@ -98,5 +102,9 @@ public class Main {
 
     public static PlayerAPIList getPlayerAPIList() {
         return playerAPIList;
+    }
+
+    public static MinecraftChannelIdentifier getOUTGOING() {
+        return OUTGOING;
     }
 }
