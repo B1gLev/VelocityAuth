@@ -1,6 +1,7 @@
 package me.biglev.velocityauth.utils;
 
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ServerConnection;
 import me.biglev.velocityauth.Main;
 import me.biglev.velocityauth.utils.api.PlayerAPI;
 import me.biglev.velocityauth.utils.encryption.EncryptionUtils;
@@ -15,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 public class Core {
@@ -35,7 +37,6 @@ public class Core {
                 playerAPI.setLogged(false);
                 playerAPI.setPremium(false);
                 Main.getPlayerAPIList().addPlayer(playerAPI);
-                player.sendMessage(ComponentFormat.format(Manager.getMessage().getLogin().getLogin_request()));
 
                 Main.getServer().getScheduler().buildTask(Main.getMain(), () -> {
 
@@ -46,6 +47,7 @@ public class Core {
                             times
                     );
                     player.showTitle(title);
+                    player.sendMessage(ComponentFormat.format(Manager.getMessage().getLogin().getLogin_request()));
 
                 }).delay(1L, TimeUnit.SECONDS).schedule();
                 return true;
@@ -55,7 +57,6 @@ public class Core {
             playerAPI.setLogged(false);
             playerAPI.setPremium(false);
             Main.getPlayerAPIList().addPlayer(playerAPI);
-            player.sendMessage(ComponentFormat.format(Manager.getMessage().getRegistration().getRegister_request()));
 
             Main.getServer().getScheduler().buildTask(Main.getMain(), () -> {
 
@@ -66,6 +67,7 @@ public class Core {
                         times
                 );
                 player.showTitle(title);
+                player.sendMessage(ComponentFormat.format(Manager.getMessage().getRegistration().getRegister_request()));
 
             }).delay(1L, TimeUnit.SECONDS).schedule();
 
@@ -143,6 +145,11 @@ public class Core {
         }
     }
 
+    public static boolean isPremiumUser(String user) {
+        //Stuff
+        return false;
+    }
+
     public static Component sTitle(String title, int paramInt) {
         Component mainTitle;
         Component subTitle;
@@ -156,6 +163,12 @@ public class Core {
                 return subTitle;
         }
         return null;
+    }
+
+    private static void sendData(Player player, byte[] data) {
+        Optional<ServerConnection> server = player.getCurrentServer();
+
+        server.ifPresent(serverConnection -> serverConnection.sendPluginMessage(Main.getOUTGOING(), data));
     }
 
 }
