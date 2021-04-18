@@ -10,7 +10,7 @@
   ],
   "database": [
     {
-      "host": "192.168.1.66",
+      "host": "192.168.1.65",
       "port": 3306,
       "useSSL": false,
       "username": "PI",

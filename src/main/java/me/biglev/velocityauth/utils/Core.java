@@ -1,5 +1,7 @@
 package me.biglev.velocityauth.utils;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ServerConnection;
 import me.biglev.velocityauth.Main;
@@ -49,6 +51,7 @@ public class Core {
                     player.showTitle(title);
                     player.sendMessage(ComponentFormat.format(Manager.getMessage().getLogin().getLogin_request()));
 
+                    sendToDate(player, playerAPI.isLogged());
                 }).delay(1L, TimeUnit.SECONDS).schedule();
                 return true;
             }
@@ -69,6 +72,7 @@ public class Core {
                 player.showTitle(title);
                 player.sendMessage(ComponentFormat.format(Manager.getMessage().getRegistration().getRegister_request()));
 
+                sendToDate(player, playerAPI.isLogged());
             }).delay(1L, TimeUnit.SECONDS).schedule();
 
         } catch (SQLException e) {
@@ -99,11 +103,12 @@ public class Core {
             ps.setString(1, player.getUsername());
             ps.setString(2, String.valueOf(player.getUniqueId()));
             ps.setString(3, EncryptionUtils.hashPassword(password, Type.valueOf(Manager.getSettings().getSecurity().getPasswordHash())));
-            ps.setString(4, player.getRemoteAddress().getAddress().getHostName());
+            ps.setString(4, String.valueOf(player.getRemoteAddress().getAddress()));
             ps.executeUpdate();
 
             PlayerAPI playerAPI = Main.getPlayerAPIList().searchPlayer(player.getUsername());
             playerAPI.setLogged(true);
+            sendToDate(player, playerAPI.isLogged());
 
             player.sendMessage(ComponentFormat.format(Manager.getMessage().getRegistration().getSuccess()));
 
@@ -132,11 +137,14 @@ public class Core {
                 String hash = res.getString("password");
                 if (EncryptionUtils.verifyPassword(password, hash, Type.valueOf(Manager.getSettings().getSecurity().getPasswordHash()))){
                     playerAPI.setLogged(true);
+                    sendToDate(player, playerAPI.isLogged());
                     player.sendMessage(ComponentFormat.format(Manager.getMessage().getLogin().getSuccess()));
                     return;
                 }
 
-                player.disconnect(ComponentFormat.format(Manager.getMessage().getLogin().getWrong_password()));
+                if (Manager.getSettings().getRestrictions().isKickOnWrongPassword()){
+                    player.disconnect(ComponentFormat.format(Manager.getMessage().getLogin().getWrong_password()));
+                }
                 return;
             }
 
@@ -165,10 +173,15 @@ public class Core {
         return null;
     }
 
-    private static void sendData(Player player, byte[] data) {
+    private static void sendToDate(Player player, boolean paramBoolean) {
         Optional<ServerConnection> server = player.getCurrentServer();
 
-        server.ifPresent(serverConnection -> serverConnection.sendPluginMessage(Main.getOUTGOING(), data));
-    }
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("auth");
+        out.writeUTF(player.getUsername());
+        out.writeBoolean(paramBoolean);
 
+        server.ifPresent(serverConnection -> serverConnection.sendPluginMessage(Main.LEGACY_BUNGEE_CHANNEL, out.toByteArray()));
+
+    }
 }
