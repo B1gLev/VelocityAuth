@@ -25,14 +25,15 @@ public class Core {
 
     public static boolean playerExists(Player player) {
         PlayerAPI playerAPI = new PlayerAPI();
-        Connection con;
-        PreparedStatement ps;
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet res = null;
 
         try {
             con = Main.getMysql().getHikariDataSource().getConnection();
             ps = con.prepareStatement("SELECT * FROM auth WHERE realname=?");
             ps.setString(1, player.getUsername());
-            ResultSet res = ps.executeQuery();
+            res = ps.executeQuery();
 
             if (res.next()) {
                 playerAPI.setName(player.getUsername());
@@ -77,21 +78,30 @@ public class Core {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                res.close();
+                ps.close();
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
 
     public static void regCommand(Player player, String password) {
-        Connection con;
-        PreparedStatement ps;
-        PreparedStatement ps2;
+        Connection con = null;
+        PreparedStatement ps = null;
+        PreparedStatement ps2 = null;
+        ResultSet res = null;
 
         try {
             con = Main.getMysql().getHikariDataSource().getConnection();
 
             ps2 = con.prepareStatement("SELECT * FROM auth WHERE realname=?");
             ps2.setString(1, player.getUsername());
-            ResultSet res = ps2.executeQuery();
+            res = ps2.executeQuery();
 
             if (res.next()) {
                 player.sendMessage(ComponentFormat.format(Manager.getMessage().getError_messages().getLogged_in()));
@@ -114,18 +124,28 @@ public class Core {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                res.close();
+                ps2.close();
+                ps.close();
+                con.close();
+            } catch (SQLException e) {
+
+            }
         }
     }
 
     public static void loginCommand(Player player, String password) {
-        Connection con;
-        PreparedStatement ps;
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet res = null;
 
         try {
             con = Main.getMysql().getHikariDataSource().getConnection();
             ps = con.prepareStatement("SELECT * FROM auth WHERE realname=?");
             ps.setString(1, player.getUsername());
-            ResultSet res = ps.executeQuery();
+            res = ps.executeQuery();
 
             if (res.next()){
                 PlayerAPI playerAPI = Main.getPlayerAPIList().searchPlayer(player.getUsername());
@@ -150,6 +170,14 @@ public class Core {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                res.close();
+                ps.close();
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
