@@ -8,6 +8,7 @@ public class Settings {
     private List<String> authServers;
     private List<String> commands;
     private ArrayList<Database> database;
+    private ArrayList<premiumAuthentication> premiumAuthentication;
     private ArrayList<Security> security;
     private ArrayList<Restrictions> restrictions;
 
@@ -21,6 +22,10 @@ public class Settings {
 
     public Database getDatabase() {
         return database.get(0);
+    }
+
+    public premiumAuthentication getPremiumAuthentication() {
+        return premiumAuthentication.get(0);
     }
 
     public Security getSecurity() {
@@ -104,6 +109,26 @@ public class Settings {
                     ", database='" + database + '\'' +
                     ", port=" + port +
                     ", useSSL=" + useSSL +
+                    '}';
+        }
+    }
+
+    public class premiumAuthentication {
+        private boolean premiumCommand, offlineUUID;
+
+        public boolean isPremiumCommand() {
+            return premiumCommand;
+        }
+
+        public boolean isOfflineUUID() {
+            return offlineUUID;
+        }
+
+        @Override
+        public String toString() {
+            return "premiumAuthentication{" +
+                    "premiumCommand=" + premiumCommand +
+                    ", offlineUUID=" + offlineUUID +
                     '}';
         }
     }

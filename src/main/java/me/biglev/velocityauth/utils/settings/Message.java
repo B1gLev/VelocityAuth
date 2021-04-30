@@ -6,11 +6,16 @@ public class Message {
 
     private ArrayList<Registration> registration;
     private ArrayList<Login> login;
+    private ArrayList<Premium> premium;
     private ArrayList<Title_Settings> title;
     private ArrayList<Error_Message> error_messages;
 
     public Registration getRegistration() {
         return registration.get(0);
+    }
+
+    public Premium getPremium() {
+        return premium.get(0);
     }
 
     public Login getLogin() {
@@ -89,6 +94,26 @@ public class Message {
         }
     }
 
+    public class Premium {
+        private String already_premium, success;
+
+        public String getAlready_premium() {
+            return already_premium;
+        }
+
+        public String getSuccess() {
+            return success;
+        }
+
+        @Override
+        public String toString() {
+            return "Premium{" +
+                    "already_premium='" + already_premium + '\'' +
+                    ", success='" + success + '\'' +
+                    '}';
+        }
+    }
+
     public class Title_Settings {
         private ArrayList<Title_Register> register;
         private ArrayList<Title_Login> login;
@@ -150,7 +175,7 @@ public class Message {
     }
 
     public class Error_Message {
-        private String login_required, logged_in;
+        private String login_required, logged_in, name_length, password_length;
 
         public String getLogin_required() {
             return login_required;
@@ -160,11 +185,21 @@ public class Message {
             return logged_in;
         }
 
+        public String getName_length() {
+            return name_length;
+        }
+
+        public String getPassword_length() {
+            return password_length;
+        }
+
         @Override
         public String toString() {
             return "Error_Message{" +
                     "login_required='" + login_required + '\'' +
                     ", logged_in='" + logged_in + '\'' +
+                    ", name_length='" + name_length + '\'' +
+                    ", password_length='" + password_length + '\'' +
                     '}';
         }
     }
