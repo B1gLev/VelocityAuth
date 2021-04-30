@@ -7,6 +7,9 @@ import me.biglev.velocityauth.utils.ComponentFormat;
 import me.biglev.velocityauth.utils.Core;
 import me.biglev.velocityauth.utils.settings.Manager;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class RegisterCommand implements SimpleCommand {
 
     @Override
@@ -28,9 +31,16 @@ public class RegisterCommand implements SimpleCommand {
         String password_first = args[0];
         String password_second = args[1];
 
-        if (password_first.equals(password_second)) {
-            Core.regCommand(player, password_second);
-            return;
+        String regex = "^[a-zA-Z0-9]{" + Manager.getSettings().getSecurity().getMinPasswordLength() + "," + Manager.getSettings().getSecurity().getPasswordMaxLength() + "}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password_first);
+
+        if (matcher.matches()) {
+            if (password_first.equals(password_second)) {
+                Core.regCommand(player, password_second);
+            }
+        } else {
+            player.sendMessage(ComponentFormat.format(Manager.getMessage().getError_messages().getPassword_length()));
         }
     }
 }
