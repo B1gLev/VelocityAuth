@@ -14,7 +14,7 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessage());
+        getServer().getMessenger().registerIncomingPluginChannel(this, "auth:main", new PluginMessage());
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);
     }
 

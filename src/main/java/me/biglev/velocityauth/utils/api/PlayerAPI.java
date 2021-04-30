@@ -1,32 +1,20 @@
 package me.biglev.velocityauth.utils.api;
 
+import java.util.HashMap;
+
 public class PlayerAPI {
 
-    private String name;
-    private boolean logged;
-    private boolean premium;
+    private HashMap<String, PlayerProfile> playerAPIS = new HashMap<>();
 
-    public String getName() {
-        return name;
+    public void addPlayer(PlayerProfile paramPlayer){
+        playerAPIS.putIfAbsent(paramPlayer.getName(), paramPlayer);
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isLogged() {
-        return logged;
-    }
-
-    public void setLogged(boolean logged) {
-        this.logged = logged;
-    }
-
-    public boolean isPremium() {
-        return premium;
-    }
-
-    public void setPremium(boolean premium) {
-        this.premium = premium;
+    public PlayerProfile searchPlayer(String paramString) {
+        PlayerProfile playerProfile = playerAPIS.get(paramString);
+        if (playerProfile != null){
+            return playerProfile;
+        }
+        return null;
     }
 }
