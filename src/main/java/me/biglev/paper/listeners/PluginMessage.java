@@ -10,7 +10,7 @@ public class PluginMessage implements PluginMessageListener {
 
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
-        if (!channel.equalsIgnoreCase("BungeeCord")) {
+        if (!channel.equalsIgnoreCase("auth:main")) {
             return;
         }
 
