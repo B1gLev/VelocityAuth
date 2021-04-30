@@ -10,11 +10,11 @@
   ],
   "database": [
     {
-      "host": "192.168.1.65",
+      "host": "localhost",
       "port": 3306,
       "useSSL": false,
-      "username": "PI",
-      "password": "pisql1234",
+      "username": "root",
+      "password": "",
       "database": "VelocityAuth"
     }
   ],
@@ -26,10 +26,16 @@
       "passwordHash": "BCRYPT"
     }
   ],
+  "premiumAuthentication": [
+    {
+      "premiumCommand": false,
+      "offlineUUID": false
+    }
+  ],
   "restrictions": [
     {
       "maxRegPerIp": 3,
-      "minNicknameLength": 3,
+      "minNicknameLength": 5,
       "maxNicknameLength": 16,
       "kickOnWrongPassword": true
     }

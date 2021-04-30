@@ -16,6 +16,13 @@
     }
   ],
 
+  "premium": [
+    {
+      "success": "Successfully set up! Step back and enjoy the premium log in!",
+      "already_premium": "You are already a premium player!"
+    }
+  ],
+
   "title": [
     {
       "register": [
@@ -36,7 +43,9 @@
   "error_messages": [
     {
       "login_required": "&cAuthentication required.",
-      "logged_in": "&cYou're already logged in!"
+      "logged_in": "&cYou're already logged in!",
+      "name_length": "&cYour username is either too short or too long!",
+      "password_length": "&cYour password is either too short or too long!"
     }
   ]
 }
