@@ -20,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
+import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -41,8 +42,7 @@ public class Core {
 
                 if (!res.getBoolean("premium")) {
                     Main.getServer().getScheduler().buildTask(Main.getMain(), () -> {
-
-                        Title.Times times = Title.Times.of(Ticks.duration(15), Duration.ofMillis(3000), Ticks.duration(20));
+                        Title.Times times = Title.Times.of(Ticks.duration(15), Duration.ofMillis(6000), Ticks.duration(20));
                         Title title = Title.title(
                                 sTitle(Manager.getMessage().getTitle_settings().getLogin().get(0).getMainTitle(), 1),
                                 sTitle(Manager.getMessage().getTitle_settings().getLogin().get(0).getSubTitle(), 2),
@@ -50,7 +50,6 @@ public class Core {
                         );
                         player.showTitle(title);
                         player.sendMessage(ComponentFormat.format(Manager.getMessage().getLogin().getLogin_request()));
-
                         sendToDate(player, playerProfile.isLogged());
                     }).delay(1L, TimeUnit.SECONDS).schedule();
                     return true;
@@ -60,8 +59,7 @@ public class Core {
             }
 
             Main.getServer().getScheduler().buildTask(Main.getMain(), () -> {
-
-                Title.Times times = Title.Times.of(Ticks.duration(15), Duration.ofMillis(3000), Ticks.duration(20));
+                Title.Times times = Title.Times.of(Ticks.duration(15), Duration.ofMillis(6000), Ticks.duration(20));
                 Title title = Title.title(
                         sTitle(Manager.getMessage().getTitle_settings().getRegister().get(0).getMainTitle(), 1),
                         sTitle(Manager.getMessage().getTitle_settings().getRegister().get(0).getSubTitle(), 2),
@@ -97,7 +95,9 @@ public class Core {
         Connection con = null;
         PreparedStatement ps = null;
         PreparedStatement ps2 = null;
+        PreparedStatement ps3 = null;
         ResultSet res = null;
+        ResultSet res2 = null;
 
         try {
             con = Main.getMysql().getHikariDataSource().getConnection();
@@ -110,16 +110,29 @@ public class Core {
                 player.sendMessage(ComponentFormat.format(Manager.getMessage().getError_messages().getLogged_in()));
                 return;
             }
+
             String ipaddress = player.getRemoteAddress().getAddress().toString();
             String[] regex_ip = ipaddress.split("/");
 
-            ps = con.prepareStatement("INSERT INTO auth (realname, uuid, password, premium, ipaddress) VALUES (?,?,?,?,?)");
+            ps3 = con.prepareStatement("SELECT COUNT(ipaddress) FROM auth WHERE ipaddress=?");
+            ps3.setString(1, regex_ip[1]);
+            res2 = ps3.executeQuery();
+            if (res2.next()) {
+                int count = res2.getInt("COUNT(ipaddress)");
+                if (count == Manager.getSettings().getRestrictions().getMaxRegPerIp()) {
+                    player.sendMessage(ComponentFormat.format(Manager.getMessage().getRegistration().getMaxregIP()));
+                    return;
+                }
+            }
+            ps = con.prepareStatement("INSERT INTO auth (realname, uuid, password, premium, registration_ipaddress, login_ipaddress, registration_time) VALUES (?,?,?,?,?,?,?)");
 
             ps.setString(1, player.getUsername());
             ps.setString(2, String.valueOf(player.getUniqueId()));
             ps.setString(3, EncryptionUtils.hashPassword(password, Type.valueOf(Manager.getSettings().getSecurity().getPasswordHash())));
             ps.setBoolean(4, false);
             ps.setString(5, regex_ip[1]);
+            ps.setString(6, regex_ip[1]);
+            ps.setString(7, new Date().toString());
             ps.executeUpdate();
 
             PlayerProfile playerProfile = Main.getPlayerAPIList().searchPlayer(player.getUsername());
@@ -134,10 +147,12 @@ public class Core {
             try {
                 if (res != null) {
                     res.close();
+                    res2.close();
                 }
                 if (ps != null) {
                     ps.close();
                     ps2.close();
+                    ps3.close();
                 }
                 if (con != null) {
                     con.close();
@@ -171,6 +186,15 @@ public class Core {
                     playerProfile.setLogged(true);
                     sendToDate(player, playerProfile.isLogged());
                     player.sendMessage(ComponentFormat.format(Manager.getMessage().getLogin().getSuccess()));
+
+                    String ipaddress = player.getRemoteAddress().getAddress().toString();
+                    String[] regex_ip = ipaddress.split("/");
+
+                    con = Main.getMysql().getHikariDataSource().getConnection();
+                    ps = con.prepareStatement("UPDATE auth SET login_ipaddress=? WHERE realname=??");
+                    ps.setString(1, regex_ip[1]);
+                    ps.setString(2, player.getUsername());
+                    ps.executeUpdate();
                     return;
                 }
 

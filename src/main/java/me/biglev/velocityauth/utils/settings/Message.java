@@ -40,7 +40,7 @@ public class Message {
     }
 
     public class Registration {
-        private String register_request, command_usage, success;
+        private String register_request, command_usage, success, maxregIP;
 
         public String getRegister_request() {
             return register_request;
@@ -54,12 +54,17 @@ public class Message {
             return success;
         }
 
+        public String getMaxregIP() {
+            return maxregIP;
+        }
+
         @Override
         public String toString() {
             return "Registration{" +
                     "register_request='" + register_request + '\'' +
                     ", command_usage='" + command_usage + '\'' +
                     ", success='" + success + '\'' +
+                    ", maxregIP='" + maxregIP + '\'' +
                     '}';
         }
     }

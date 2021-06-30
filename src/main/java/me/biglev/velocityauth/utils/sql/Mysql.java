@@ -43,7 +43,9 @@ public class Mysql {
                 "\t`uuid` longtext,\n" +
                 "\t`password` longtext,\n" +
                 "\t`premium` boolean,\n" +
-                "\t`ipaddress` text,\n" +
+                "\t`registration_ipaddress` text,\n" +
+                "\t`login_ipaddress` text,\n" +
+                "\t`registration_time` text,\n" +
                 "\tPRIMARY KEY( `id` )\n" +
                 ");";
 

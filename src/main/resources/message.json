@@ -1,18 +1,19 @@
 {
   "registration": [
     {
-      "register_request": "&cPlease, register to the server with the command: /register <password> <password>",
-      "command_usage": "Usage: /register <password> <password>",
-      "success": "&aSuccessful registration!"
+      "register_request": "<red>Please, register to the server with the command: /register <password> <password>",
+      "command_usage": "<red>Usage: /register <password> <password>",
+      "success": "<green>Successful registration!",
+      "maxregIP": "<red>You have reached the maximum number of users that can be registered at this ip address."
     }
   ],
 
   "login": [
     {
-      "login_request": "&cPlease, login to the server with the command: /login <password>",
-      "command_usage": "Usage: /login <password>",
-      "success": "&aSuccessful login!",
-      "wrong_password": "&cWrong password!"
+      "login_request": "<red>Please, login to the server with the command: /login <password>",
+      "command_usage": "<red>Usage: /login <password>",
+      "success": "<green>Successful login!",
+      "wrong_password": "<red>Wrong password!"
     }
   ],
 
@@ -42,10 +43,10 @@
 
   "error_messages": [
     {
-      "login_required": "&cAuthentication required.",
-      "logged_in": "&cYou're already logged in!",
-      "name_length": "&cYour username is either too short or too long!",
-      "password_length": "&cYour password is either too short or too long!"
+      "login_required": "<red>Authentication required.",
+      "logged_in": "<red>You're already logged in!",
+      "name_length": "<red>Your username is either too short or too long!",
+      "password_length": "<red>Your password is either too short or too long!"
     }
   ]
 }
