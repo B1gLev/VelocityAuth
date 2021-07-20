@@ -28,8 +28,8 @@ public class RegisterCommand implements SimpleCommand {
             return;
         }
 
-        String password_first = args[0];
-        String password_second = args[1];
+        final String password_first = args[0];
+        final String password_second = args[1];
         String regex = "^[a-zA-Z0-9]{" + Manager.getSettings().getSecurity().getMinPasswordLength() + "," + Manager.getSettings().getSecurity().getPasswordMaxLength() + "}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(password_first);

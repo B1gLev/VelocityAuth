@@ -114,11 +114,11 @@ public class Core {
             String ipaddress = player.getRemoteAddress().getAddress().toString();
             String[] regex_ip = ipaddress.split("/");
 
-            ps3 = con.prepareStatement("SELECT COUNT(ipaddress) FROM auth WHERE ipaddress=?");
+            ps3 = con.prepareStatement("SELECT COUNT(registration_ipaddress) FROM auth WHERE registration_ipaddress=?");
             ps3.setString(1, regex_ip[1]);
             res2 = ps3.executeQuery();
             if (res2.next()) {
-                int count = res2.getInt("COUNT(ipaddress)");
+                int count = res2.getInt("COUNT(registration_ipaddress)");
                 if (count == Manager.getSettings().getRestrictions().getMaxRegPerIp()) {
                     player.sendMessage(ComponentFormat.format(Manager.getMessage().getRegistration().getMaxregIP()));
                     return;
@@ -191,7 +191,7 @@ public class Core {
                     String[] regex_ip = ipaddress.split("/");
 
                     con = Main.getMysql().getHikariDataSource().getConnection();
-                    ps = con.prepareStatement("UPDATE auth SET login_ipaddress=? WHERE realname=??");
+                    ps = con.prepareStatement("UPDATE auth SET login_ipaddress=? WHERE realname=?");
                     ps.setString(1, regex_ip[1]);
                     ps.setString(2, player.getUsername());
                     ps.executeUpdate();

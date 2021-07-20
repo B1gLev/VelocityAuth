@@ -26,7 +26,7 @@ import java.nio.file.Path;
 @Plugin(
         id = "auth",
         name = "VelocityAuth",
-        version = "1.6-SNAPSHOT",
+        version = "1.9.3-SNAPSHOT",
         description = "This is the authentication plugin",
         authors = {"BigLev"}
 )
@@ -72,9 +72,9 @@ public class Main {
         commandManager.register(reg, new RegisterCommand());
         commandManager.register(login, new LoginCommand());
 
-        if (Manager.getSettings().getPremiumAuthentication().isPremiumCommand()) {
-            commandManager.register(premium, new PremiumCommand());
-        }
+//        if (Manager.getSettings().getPremiumAuthentication().isPremiumCommand()) {
+//            commandManager.register(premium, new PremiumCommand());
+//        }
 
         //Mysql connection
         mysql = new Mysql();
